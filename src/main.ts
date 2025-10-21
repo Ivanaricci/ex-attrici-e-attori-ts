@@ -64,10 +64,32 @@ async function getActress(id: number): Promise<Actress | null> {
     }
   } catch (error) {
     if (error instanceof Error) {
-      console.error('Errore', error);
+      console.error('Errore nel recupero di un attrice', error);
     } else {
       console.error('Errore sconosciuto', error);
     }
   }
   return null
+}
+
+async function getAllActresses(): Promise<Actress[]> {
+  try {
+    const response = await fetch(`http://localhost:3333/actresses`);
+    if (!response.ok) {
+      throw new Error(`Errore HTTP ${response.status} : ${response.statusText}`)
+    }
+    const dati: unknown = await response.json()
+    if (!(dati instanceof Array)) {
+      throw new Error('Formato dei dati non valido: non è un array!')
+    }
+    const attriciValide: Actress[] = dati.filter(isActress);
+    return attriciValide
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Errore nel recupero delle attrici', error);
+    } else {
+      console.error('Errore sconosciuto', error);
+    }
+  }
+  return []
 }
