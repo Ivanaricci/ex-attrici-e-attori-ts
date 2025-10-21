@@ -93,3 +93,18 @@ async function getAllActresses(): Promise<Actress[]> {
   }
   return []
 }
+
+async function getActresses(ids: number[]): Promise<(Actress | null)[]> {
+  try {
+    const promise = ids.map(id => getActress(id));
+    const actresses = await Promise.all(promise);
+    return actresses;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Errore nel recupero delle attrici', error);
+    } else {
+      console.error('Errore sconosciuto', error);
+    }
+  }
+  return [];
+}
